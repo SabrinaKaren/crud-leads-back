@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 @Order(1)
-public class AuthenticationFilter implements Filter {
+public class FilterToAuthenticate implements Filter {
     
     @Override
     public void init(FilterConfig fc) throws ServletException {
@@ -36,21 +36,15 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain fc) throws IOException, ServletException {
         
         HttpServletRequest req = (HttpServletRequest) request;
-        if (req.getRequestURI().contains("actuator")) {
-            fc.doFilter(request, response);
-        }
-        
-        System.out.println("Authenticating a request from :" + req.getRemoteAddr());
         
         if(req.getHeader("Authorization") != null){
-            String token = req.getHeader("Authorization").replace("CustomToken", "").trim();
             try {
-                System.out.println("Authenticated a request from :" + req.getRemoteAddr());
                 fc.doFilter(request, response);
-            } catch (Exception ex) {
+            } catch (Exception e) {
                 ((HttpServletResponse)response).setStatus(401);
             }
         }else{
+            // se for endpoint de login, não precisa ter token
             if(req.getRequestURI().equals("/auth/login")){
                 fc.doFilter(request, response);
             }else{
@@ -61,15 +55,14 @@ public class AuthenticationFilter implements Filter {
     }
     
     @Override
-    public void destroy() {
-        
+    public void destroy() {  
     }
     
     @Bean
-    public FilterRegistrationBean<AuthenticationFilter> authFilter(){
+    public FilterRegistrationBean<FilterToAuthenticate> authFilter(){
         
-        FilterRegistrationBean<AuthenticationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new AuthenticationFilter());
+        FilterRegistrationBean<FilterToAuthenticate> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new FilterToAuthenticate());
         registrationBean.addUrlPatterns("/api/*");
 
         return registrationBean; 
