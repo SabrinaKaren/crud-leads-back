@@ -91,5 +91,20 @@ public class StatusService {
         statusRepository.deleteById(statusId);
         
     }
+    
+    public List<StatusData> getAll() throws Exception {
+        
+        List<StatusData> listToReturn = new ArrayList<>();
+        
+        List<Statuslead> statusList = statusRepository.findAll();
+        if (!statusList.isEmpty()){
+            statusList.forEach((item)->{
+                listToReturn.add(new StatusData(item.getId(), item.getDescription()));
+            });
+        }
+        
+        return listToReturn;
+        
+    }
 
 }

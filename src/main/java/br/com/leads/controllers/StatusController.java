@@ -160,5 +160,38 @@ public class StatusController {
         return envelopingResponse;
 		
     }
+    
+    @GetMapping("/get-all")
+    public EnvelopingResponseData getAll(@RequestHeader("Authorization") String token) throws Exception{
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
+        envelopingResponse.setMethod("getAll");
+        
+        try {
+            
+            envelopingResponse.setResult("SUCCESS");
+            envelopingResponse.setMsgSaida(new ArrayList<>());
+            
+            List<StatusData> statusList = statusService.getAll();
+            statusList.forEach((item)->{
+                envelopingResponse.getMsgSaida().add(item);
+            });
+            
+        } catch (Exception e) {
+            
+            envelopingResponse.setResult("ERROR");
+            envelopingResponse.setError(new ArrayList<>());
+            
+            ErrorItemData error = new ErrorItemData();
+            error.setCode("999");
+            error.setMessage(e.getMessage());
+            
+            envelopingResponse.getError().add(error);
+            
+        }
+        
+        return envelopingResponse;
+        
+    }
 
 }

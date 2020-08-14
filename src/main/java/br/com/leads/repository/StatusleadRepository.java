@@ -11,4 +11,7 @@ public interface StatusleadRepository extends PagingAndSortingRepository<Statusl
 
     public List<Statuslead> findByDescriptionContainingIgnoreCase(String description);
     
+    @Override
+    public List<Statuslead> findAll();
+    
 }
