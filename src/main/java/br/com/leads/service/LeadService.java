@@ -77,7 +77,9 @@ public class LeadService {
         objectToReturn.setName(leadOp.get().getCustomerName());
         objectToReturn.setPhone(leadOp.get().getCustomerPhone());
         objectToReturn.setEmail(leadOp.get().getCustomerEmail());
-        objectToReturn.setStatusId(new Long(leadOp.get().getStatusId()));
+        if (leadOp.get().getStatusId() != null){
+            objectToReturn.setStatusId(new Long(leadOp.get().getStatusId()));
+        }
         objectToReturn.setLastUpdateDate(leadOp.get().getDate());
         
         return objectToReturn;
