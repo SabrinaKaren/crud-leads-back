@@ -55,13 +55,14 @@ public class LoginService {
         Date dateNow = new Date();
         long expirationDateInMilliseconds = dateNow.getTime() + 7200000;
         
+        
         token.setToken(UUID.randomUUID().toString());
         token.setExpirationDate(new Timestamp(expirationDateInMilliseconds));
         token = tokenRepository.save(token);
         
         objectToReturn.setUserId(new Long(token.getUserId()));
         objectToReturn.setToken(token.getToken());
-        objectToReturn.setExpirationDateInMilliseconds(expirationDateInMilliseconds);
+        objectToReturn.setExpirationDate(new Date(expirationDateInMilliseconds));
         
         return objectToReturn;
         

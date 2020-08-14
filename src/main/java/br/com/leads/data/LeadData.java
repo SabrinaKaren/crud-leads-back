@@ -5,8 +5,6 @@
  */
 package br.com.leads.data;
 
-import java.util.Date;
-
 /**
  *
  * @author Sabrina
@@ -19,16 +17,17 @@ public class LeadData {
     private String email;
     private Long statusId;
     private String statusName;
-    private Date lastUpdateDate;
+    private String lastUpdateDateFormatted;
 
-    public LeadData(Long id, String name, String phone, String email, Long statusId, String statusName, Date lastUpdateDate) {
+    public LeadData(Long id, String name, String phone, String email, Long statusId,
+            String statusName, String lastUpdateDateFormatted) {
         this.id = id;
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.statusId = statusId;
         this.statusName = statusName;
-        this.lastUpdateDate = lastUpdateDate;
+        this.lastUpdateDateFormatted = lastUpdateDateFormatted;
     }
 
     public LeadData(Long id) {
@@ -78,20 +77,20 @@ public class LeadData {
         this.statusId = statusId;
     }
 
-    public Date getLastUpdateDate() {
-        return lastUpdateDate;
-    }
-
-    public void setLastUpdateDate(Date lastUpdateDate) {
-        this.lastUpdateDate = lastUpdateDate;
-    }
-
     public String getStatusName() {
         return statusName;
     }
 
     public void setStatusName(String statusName) {
         this.statusName = statusName;
+    }
+
+    public String getLastUpdateDateFormatted() {
+        return lastUpdateDateFormatted;
+    }
+
+    public void setLastUpdateDateFormatted(String lastUpdateDateFormatted) {
+        this.lastUpdateDateFormatted = lastUpdateDateFormatted;
     }
     
 }

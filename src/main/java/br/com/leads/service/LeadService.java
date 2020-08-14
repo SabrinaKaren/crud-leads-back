@@ -10,6 +10,7 @@ import br.com.leads.entities.Lead;
 import br.com.leads.repository.LeadRepository;
 import br.com.leads.utils.CommonMethods;
 import br.com.leads.utils.Constants;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -36,6 +37,7 @@ public class LeadService {
     public List<LeadData> getByNameContains(String nameContains) throws Exception {
         
         List<LeadData> listToReturn = new ArrayList<>();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         
         if (nameContains == null || "".equals(nameContains)){
             throw new Exception("Um nome deve ser informado para que a pesquisa seja realizada.");
@@ -51,7 +53,7 @@ public class LeadService {
                         item.getCustomerEmail(),
                         item.getStatusId() != null ? new Long(item.getStatusId()) : null,
                         item.getStatusId() != null ? commonMethods.getStatusNameByStatusId(new Long(item.getStatusId())) : null,
-                        item.getDate()
+                        dateFormat.format(item.getDate())
                 ));
             });
         }
@@ -80,7 +82,6 @@ public class LeadService {
         if (leadOp.get().getStatusId() != null){
             objectToReturn.setStatusId(new Long(leadOp.get().getStatusId()));
         }
-        objectToReturn.setLastUpdateDate(leadOp.get().getDate());
         
         return objectToReturn;
         

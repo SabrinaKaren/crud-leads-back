@@ -5,6 +5,8 @@
  */
 package br.com.leads.data;
 
+import java.util.Date;
+
 /**
  *
  * @author Sabrina
@@ -13,7 +15,7 @@ public class TokenData {
     
     private Long userId;
     private String token;
-    private long expirationDateInMilliseconds;
+    private Date expirationDate;
 
     public Long getUserId() {
         return userId;
@@ -31,12 +33,12 @@ public class TokenData {
         this.token = token;
     }
 
-    public long getExpirationDateInMilliseconds() {
-        return expirationDateInMilliseconds;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setExpirationDateInMilliseconds(long expirationDateInMilliseconds) {
-        this.expirationDateInMilliseconds = expirationDateInMilliseconds;
+    public void setExpirationDate(Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
     
 }
