@@ -32,7 +32,7 @@ public class LoginController {
     public EnvelopingResponseData login(@RequestBody LoginData loginObject) {
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("login");
+        envelopingResponse.setMethod("auth/login");
         
         try {
             

@@ -43,25 +43,6 @@ public class StatusService {
         
     }
     
-    public void save(StatusData statusObject) throws Exception{
-        
-        if (statusObject.getName() == null || "".equals(statusObject.getName())){
-            throw new Exception("O nome do status deve ser informado.");
-        }
-        
-        Statuslead status = new Statuslead();
-        if (statusObject.getId() != null){
-            Optional<Statuslead> statusOp = statusRepository.findById(statusObject.getId().longValue());
-            if (statusOp.isPresent()){
-                status = statusOp.get();
-            }
-        }
-        
-        status.setDescription(statusObject.getName().toUpperCase());
-        statusRepository.save(status);
-        
-    }
-    
     public StatusData getById(Long statusId) throws Exception{
         
         StatusData objectToReturn = new StatusData();
@@ -79,6 +60,25 @@ public class StatusService {
         objectToReturn.setName(statusOp.get().getDescription());
         
         return objectToReturn;
+        
+    }
+    
+    public void save(StatusData statusObject) throws Exception{
+        
+        if (statusObject.getName() == null || "".equals(statusObject.getName())){
+            throw new Exception("O nome do status deve ser informado.");
+        }
+        
+        Statuslead status = new Statuslead();
+        if (statusObject.getId() != null){
+            Optional<Statuslead> statusOp = statusRepository.findById(statusObject.getId().longValue());
+            if (statusOp.isPresent()){
+                status = statusOp.get();
+            }
+        }
+        
+        status.setDescription(statusObject.getName().toUpperCase());
+        statusRepository.save(status);
         
     }
     

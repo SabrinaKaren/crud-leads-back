@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.leads.data.EnvelopingResponseData;
 import br.com.leads.data.LeadData;
-import br.com.leads.data.StatusData;
 import br.com.leads.service.LeadService;
 import java.util.List;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,11 +32,39 @@ public class LeadController {
     @Autowired
     LeadService leadService;
     
+    @GetMapping("/get-by-name/{name}")
+    public EnvelopingResponseData getByNameContains(@RequestHeader("Authorization") String token, @PathVariable String name) throws Exception{
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/getByNameContains");
+        
+        try {
+            
+            envelopingResponse = envelopingResponse.isSuccess();
+            
+            List<LeadData> leadsFound = leadService.getByNameContains(name);
+            leadsFound.forEach(envelopingResponse.getMsgSaida()::add);
+            
+        } catch (Exception e) {
+            
+            envelopingResponse = envelopingResponse.isError();
+            
+            ErrorItemData error = new ErrorItemData();
+            error.setCode("999");
+            error.setMessage(e.getMessage());
+            
+            envelopingResponse.getError().add(error);
+            
+        }
+        
+        return envelopingResponse;
+        
+    }
+    
     @GetMapping("/get-by-id/{leadId}")
     public EnvelopingResponseData getLeadById(@RequestHeader("Authorization") String token, @PathVariable Long leadId) throws Exception{
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("getLeadById");
+        envelopingResponse.setMethod("lead/getLeadById");
         
         try {
             
@@ -68,7 +96,7 @@ public class LeadController {
     public EnvelopingResponseData save(@RequestHeader("Authorization") String token, @RequestBody LeadData leadObject) {
 
     	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("save");
+        envelopingResponse.setMethod("lead/save");
         
         try {
             
@@ -96,21 +124,20 @@ public class LeadController {
         
     }
     
-    @GetMapping("/get-by-name/{name}")
-    public EnvelopingResponseData getByNameContains(@RequestHeader("Authorization") String token, @PathVariable String name) throws Exception{
-        
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("getByNameContains");
+    @DeleteMapping("/delete/{leadId}")
+    public EnvelopingResponseData deleteById(@RequestHeader("Authorization") String token, @PathVariable("leadId") Long leadId) {
+
+    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
+        envelopingResponse.setMethod("lead/deleteById");
         
         try {
             
             envelopingResponse.setResult("SUCCESS");
             envelopingResponse.setMsgSaida(new ArrayList<>());
             
-            List<LeadData> leadsFound = leadService.getByNameContains(name);
-            leadsFound.forEach((item)->{
-                envelopingResponse.getMsgSaida().add(item);
-            });
+            leadService.deleteById(leadId);
+            
+            envelopingResponse.getMsgSaida().add("Lead excluído com sucesso.");
             
         } catch (Exception e) {
             
@@ -126,7 +153,7 @@ public class LeadController {
         }
         
         return envelopingResponse;
-        
+		
     }
 
 }

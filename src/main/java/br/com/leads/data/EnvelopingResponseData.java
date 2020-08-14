@@ -5,6 +5,7 @@
  */
 package br.com.leads.data;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Component;
 
@@ -19,6 +20,13 @@ public class EnvelopingResponseData {
     private String result;
     private List<Object> msgSaida;
     private List<ErrorItemData> error;
+
+    public EnvelopingResponseData(String method) {
+        this.method = method;
+    }
+
+    public EnvelopingResponseData() {
+    }
     
     public String getMethod() {
         return method;
@@ -50,6 +58,18 @@ public class EnvelopingResponseData {
 
     public void setError(List<ErrorItemData> error) {
         this.error = error;
+    }
+    
+    public EnvelopingResponseData isSuccess(){
+        this.setResult("SUCCESS");
+        this.setMsgSaida(new ArrayList<>());
+        return this;
+    }
+    
+    public EnvelopingResponseData isError(){
+        this.setResult("ERROR");
+        this.setError(new ArrayList<>());
+        return this;
     }
     
 }

@@ -36,7 +36,7 @@ public class StatusController {
     public EnvelopingResponseData getByNameContains(@RequestHeader("Authorization") String token, @PathVariable String name) throws Exception{
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("getByNameContains");
+        envelopingResponse.setMethod("status/getByNameContains");
         
         try {
             
@@ -65,43 +65,11 @@ public class StatusController {
         
     }
     
-    @PostMapping("/save")
-    public EnvelopingResponseData save(@RequestHeader("Authorization") String token, @RequestBody StatusData statusObject) {
-
-    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("save");
-        
-        try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
-            statusService.save(statusObject);
-            
-            envelopingResponse.getMsgSaida().add("Satus salvo com sucesso.");
-            
-        } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
-        }
-        
-        return envelopingResponse;	
-        
-    }
-    
     @GetMapping("/get-by-id/{statusId}")
     public EnvelopingResponseData getById(@RequestHeader("Authorization") String token, @PathVariable Long statusId) throws Exception{
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("getById");
+        envelopingResponse.setMethod("status/getById");
         
         try {
             
@@ -129,11 +97,43 @@ public class StatusController {
         
     }
     
+    @PostMapping("/save")
+    public EnvelopingResponseData save(@RequestHeader("Authorization") String token, @RequestBody StatusData statusObject) {
+
+    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
+        envelopingResponse.setMethod("status/save");
+        
+        try {
+            
+            envelopingResponse.setResult("SUCCESS");
+            envelopingResponse.setMsgSaida(new ArrayList<>());
+            
+            statusService.save(statusObject);
+            
+            envelopingResponse.getMsgSaida().add("Satus salvo com sucesso.");
+            
+        } catch (Exception e) {
+            
+            envelopingResponse.setResult("ERROR");
+            envelopingResponse.setError(new ArrayList<>());
+            
+            ErrorItemData error = new ErrorItemData();
+            error.setCode("999");
+            error.setMessage(e.getMessage());
+            
+            envelopingResponse.getError().add(error);
+            
+        }
+        
+        return envelopingResponse;	
+        
+    }
+    
     @DeleteMapping("/delete/{statusId}")
     public EnvelopingResponseData deleteById(@RequestHeader("Authorization") String token, @PathVariable("statusId") Long statusId) {
 
     	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("deleteById");
+        envelopingResponse.setMethod("status/deleteById");
         
         try {
             
@@ -165,7 +165,7 @@ public class StatusController {
     public EnvelopingResponseData getAll(@RequestHeader("Authorization") String token) throws Exception{
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("getAll");
+        envelopingResponse.setMethod("status/getAll");
         
         try {
             
