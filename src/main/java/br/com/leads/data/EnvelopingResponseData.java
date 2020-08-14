@@ -69,6 +69,8 @@ public class EnvelopingResponseData {
     public EnvelopingResponseData isError(){
         this.setResult("ERROR");
         this.setError(new ArrayList<>());
+        ErrorItemData error = new ErrorItemData();
+        this.getError().add(error.enveloping());
         return this;
     }
     

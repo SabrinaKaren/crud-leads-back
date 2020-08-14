@@ -5,8 +5,6 @@
  */
 package br.com.leads.controllers;
 
-import br.com.leads.data.ErrorItemData;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,32 +29,17 @@ public class LoginController {
     @PostMapping("/login")
     public EnvelopingResponseData login(@RequestBody LoginData loginObject) {
         
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("auth/login");
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("login/login");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             TokenData tokenObject = loginService.login(loginObject);
-            if (tokenObject == null){
-                envelopingResponse.getMsgSaida().add("Usuário e/ou senha inválido(s).");
-            } else {
-                envelopingResponse.getMsgSaida().add(tokenObject);
-            }            
-            
+            envelopingResponse.getMsgSaida().add(tokenObject);
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;

@@ -5,7 +5,6 @@
  */
 package br.com.leads.controllers;
 
-import br.com.leads.data.ErrorItemData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.leads.data.EnvelopingResponseData;
 import br.com.leads.data.StatusData;
 import br.com.leads.service.StatusService;
-import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,30 +33,17 @@ public class StatusController {
     @GetMapping("/get-by-name/{name}")
     public EnvelopingResponseData getByNameContains(@RequestHeader("Authorization") String token, @PathVariable String name) throws Exception{
         
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("status/getByNameContains");
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("status/getByNameContains");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             List<StatusData> statusFound = statusService.getByNameContains(name);
-            statusFound.forEach((item)->{
-                envelopingResponse.getMsgSaida().add(item);
-            });
-            
+            statusFound.forEach(envelopingResponse.getMsgSaida()::add);
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;
@@ -68,29 +53,17 @@ public class StatusController {
     @GetMapping("/get-by-id/{statusId}")
     public EnvelopingResponseData getById(@RequestHeader("Authorization") String token, @PathVariable Long statusId) throws Exception{
         
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("status/getById");
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("status/getById");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             StatusData statusObject = statusService.getById(statusId);
-            
             envelopingResponse.getMsgSaida().add(statusObject);
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;
@@ -100,29 +73,17 @@ public class StatusController {
     @PostMapping("/save")
     public EnvelopingResponseData save(@RequestHeader("Authorization") String token, @RequestBody StatusData statusObject) {
 
-    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("status/save");
+    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("status/save");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             statusService.save(statusObject);
-            
             envelopingResponse.getMsgSaida().add("Satus salvo com sucesso.");
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;	
@@ -132,29 +93,17 @@ public class StatusController {
     @DeleteMapping("/delete/{statusId}")
     public EnvelopingResponseData deleteById(@RequestHeader("Authorization") String token, @PathVariable("statusId") Long statusId) {
 
-    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("status/deleteById");
+    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("status/deleteById");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             statusService.deleteById(statusId);
-            
             envelopingResponse.getMsgSaida().add("Status excluído com sucesso.");
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;
@@ -164,30 +113,17 @@ public class StatusController {
     @GetMapping("/get-all")
     public EnvelopingResponseData getAll(@RequestHeader("Authorization") String token) throws Exception{
         
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("status/getAll");
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("status/getAll");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             List<StatusData> statusList = statusService.getAll();
-            statusList.forEach((item)->{
-                envelopingResponse.getMsgSaida().add(item);
-            });
-            
+            statusList.forEach(envelopingResponse.getMsgSaida()::add);
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;

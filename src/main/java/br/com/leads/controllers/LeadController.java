@@ -5,8 +5,6 @@
  */
 package br.com.leads.controllers;
 
-import br.com.leads.data.ErrorItemData;
-import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,22 +36,14 @@ public class LeadController {
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/getByNameContains");
         
         try {
-            
             envelopingResponse = envelopingResponse.isSuccess();
-            
             List<LeadData> leadsFound = leadService.getByNameContains(name);
             leadsFound.forEach(envelopingResponse.getMsgSaida()::add);
-            
         } catch (Exception e) {
-            
             envelopingResponse = envelopingResponse.isError();
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;
@@ -63,29 +53,17 @@ public class LeadController {
     @GetMapping("/get-by-id/{leadId}")
     public EnvelopingResponseData getLeadById(@RequestHeader("Authorization") String token, @PathVariable Long leadId) throws Exception{
         
-        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("lead/getLeadById");
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/getLeadById");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             LeadData leadObject = leadService.getLeadById(leadId);
-            
             envelopingResponse.getMsgSaida().add(leadObject);
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;
@@ -94,62 +72,38 @@ public class LeadController {
     
     @PostMapping("/save")
     public EnvelopingResponseData save(@RequestHeader("Authorization") String token, @RequestBody LeadData leadObject) {
-
-    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("lead/save");
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/save");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             leadService.save(leadObject);
-            
             envelopingResponse.getMsgSaida().add("Lead salvo com sucesso.");
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
-        return envelopingResponse;	
+        return envelopingResponse;
         
     }
     
     @DeleteMapping("/delete/{leadId}")
     public EnvelopingResponseData deleteById(@RequestHeader("Authorization") String token, @PathVariable("leadId") Long leadId) {
-
-    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("lead/deleteById");
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/deleteById");
         
         try {
-            
-            envelopingResponse.setResult("SUCCESS");
-            envelopingResponse.setMsgSaida(new ArrayList<>());
-            
+            envelopingResponse = envelopingResponse.isSuccess();
             leadService.deleteById(leadId);
-            
             envelopingResponse.getMsgSaida().add("Lead excluído com sucesso.");
-            
         } catch (Exception e) {
-            
-            envelopingResponse.setResult("ERROR");
-            envelopingResponse.setError(new ArrayList<>());
-            
-            ErrorItemData error = new ErrorItemData();
-            error.setCode("999");
-            error.setMessage(e.getMessage());
-            
-            envelopingResponse.getError().add(error);
-            
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
         }
         
         return envelopingResponse;

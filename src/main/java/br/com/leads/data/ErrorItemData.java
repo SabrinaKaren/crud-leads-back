@@ -14,6 +14,9 @@ public class ErrorItemData {
     private String code;
     private String message;
 
+    public ErrorItemData() {
+    }
+
     public String getCode() {
         return code;
     }
@@ -28,6 +31,12 @@ public class ErrorItemData {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+    
+    public ErrorItemData enveloping(){
+        this.setCode("999");
+        this.setMessage("Não foi possível seguir com a solicitação.");
+        return this;
     }
     
 }

@@ -42,7 +42,7 @@ public class LoginService {
 
         Optional<User> user = userRepository.findByUserNameAndPassword(loginObject.getUserName(), loginObject.getPassword());
         if (!user.isPresent()){
-            throw new Exception("Usuário não encontrado.");
+            throw new Exception("Usuário e/ou senha inválido(s).");
         }
         
         Token token = new Token();
