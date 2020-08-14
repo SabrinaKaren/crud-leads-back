@@ -19,6 +19,11 @@ public class LeadData {
     private String statusName;
     private String lastUpdateDateFormatted;
 
+    public LeadData(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public LeadData(Long id, String name, String phone, String email, Long statusId,
             String statusName, String lastUpdateDateFormatted) {
         this.id = id;

@@ -11,4 +11,7 @@ public interface LeadRepository extends PagingAndSortingRepository<Lead, Long> {
 
     public List<Lead> findByCustomerNameContainingIgnoreCase(String customerName);
     
+    @Override
+    public List<Lead> findAll();
+    
 }

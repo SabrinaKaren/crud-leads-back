@@ -121,5 +121,20 @@ public class LeadService {
         leadRepository.deleteById(leadId);
         
     }
+    
+    public List<LeadData> getAll() throws Exception {
+        
+        List<LeadData> listToReturn = new ArrayList<>();
+        
+        List<Lead> leadList = leadRepository.findAll();
+        if (!leadList.isEmpty()){
+            leadList.forEach((item)->{
+                listToReturn.add(new LeadData(item.getId(), item.getCustomerName()));
+            });
+        }
+        
+        return listToReturn;
+        
+    }
 
 }

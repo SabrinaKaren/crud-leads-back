@@ -109,5 +109,25 @@ public class LeadController {
         return envelopingResponse;
 		
     }
+    
+    @GetMapping("/get-all")
+    public EnvelopingResponseData getAll(@RequestHeader("Authorization") String token) throws Exception{
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("lead/getAll");
+        
+        try {
+            envelopingResponse = envelopingResponse.isSuccess();
+            List<LeadData> leadsList = leadService.getAll();
+            leadsList.forEach(envelopingResponse.getMsgSaida()::add);
+        } catch (Exception e) {
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
+        }
+        
+        return envelopingResponse;
+        
+    }
 
 }
