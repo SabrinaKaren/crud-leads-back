@@ -11,40 +11,37 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import br.com.leads.data.EnvelopingResponseData;
-import br.com.leads.data.LoginData;
-import br.com.leads.data.TokenData;
-import br.com.leads.service.LoginService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import br.com.leads.data.LeadData;
+import br.com.leads.service.LeadService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  *
  * @author Sabrina
  */
 @RestController
-@RequestMapping("/auth")
-public class LoginController {
+@RequestMapping("/lead")
+public class LeadController {
 
     @Autowired
-    LoginService loginService;
+    LeadService leadService;
     
-    @PostMapping("/login")
-    public EnvelopingResponseData login(@RequestBody LoginData loginObject) {
+    @GetMapping("/get-by-id/{leadId}")
+    public EnvelopingResponseData getLeadById(@RequestHeader("Authorization") String token, @PathVariable Long leadId) throws Exception{
         
         EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
-        envelopingResponse.setMethod("login");
+        envelopingResponse.setMethod("getLeadById");
         
         try {
             
             envelopingResponse.setResult("SUCCESS");
             envelopingResponse.setMsgSaida(new ArrayList<>());
             
-            TokenData tokenObject = loginService.login(loginObject);
-            if (tokenObject == null){
-                envelopingResponse.getMsgSaida().add("Usuário e/ou senha inválido(s).");
-            } else {
-                envelopingResponse.getMsgSaida().add(tokenObject);
-            }            
+            LeadData leadObject = leadService.getLeadById(leadId);
+            
+            envelopingResponse.getMsgSaida().add(leadObject);
             
         } catch (Exception e) {
             
