@@ -18,7 +18,25 @@ public class LeadData {
     private String phone;
     private String email;
     private Long statusId;
+    private String statusName;
     private Date lastUpdateDate;
+
+    public LeadData(Long id, String name, String phone, String email, Long statusId, String statusName, Date lastUpdateDate) {
+        this.id = id;
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.statusId = statusId;
+        this.statusName = statusName;
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public LeadData(Long id) {
+        this.id = id;
+    }
+
+    public LeadData() {
+    }
 
     public Long getId() {
         return id;
@@ -66,6 +84,14 @@ public class LeadData {
 
     public void setLastUpdateDate(Date lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public String getStatusName() {
+        return statusName;
+    }
+
+    public void setStatusName(String statusName) {
+        this.statusName = statusName;
     }
     
 }

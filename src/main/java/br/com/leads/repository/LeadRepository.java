@@ -1,6 +1,7 @@
 package br.com.leads.repository;
 
 import br.com.leads.entities.Lead;
+import java.util.List;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
@@ -8,6 +9,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 public interface LeadRepository extends PagingAndSortingRepository<Lead, Long> {
 
-    
+    public List<Lead> findByCustomerNameContainingIgnoreCase(String customerName);
     
 }

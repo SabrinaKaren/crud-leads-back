@@ -14,6 +14,7 @@ import br.com.leads.data.EnvelopingResponseData;
 import br.com.leads.data.LeadData;
 import br.com.leads.data.StatusData;
 import br.com.leads.service.LeadService;
+import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,6 +93,39 @@ public class LeadController {
         }
         
         return envelopingResponse;	
+        
+    }
+    
+    @GetMapping("/get-by-name/{name}")
+    public EnvelopingResponseData getByNameContains(@RequestHeader("Authorization") String token, @PathVariable String name) throws Exception{
+        
+        EnvelopingResponseData envelopingResponse = new EnvelopingResponseData();
+        envelopingResponse.setMethod("getByNameContains");
+        
+        try {
+            
+            envelopingResponse.setResult("SUCCESS");
+            envelopingResponse.setMsgSaida(new ArrayList<>());
+            
+            List<LeadData> leadsFound = leadService.getByNameContains(name);
+            leadsFound.forEach((item)->{
+                envelopingResponse.getMsgSaida().add(item);
+            });
+            
+        } catch (Exception e) {
+            
+            envelopingResponse.setResult("ERROR");
+            envelopingResponse.setError(new ArrayList<>());
+            
+            ErrorItemData error = new ErrorItemData();
+            error.setCode("999");
+            error.setMessage(e.getMessage());
+            
+            envelopingResponse.getError().add(error);
+            
+        }
+        
+        return envelopingResponse;
         
     }
 

@@ -5,6 +5,10 @@
  */
 package br.com.leads.utils;
 
+import br.com.leads.entities.Statuslead;
+import br.com.leads.repository.StatusleadRepository;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,6 +17,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CommonMethods {
+    
+    @Autowired
+    StatusleadRepository statusleadRepository;
     
     public String getStringNoSpecialCharacters(String expression){
         
@@ -28,6 +35,17 @@ public class CommonMethods {
 
         return expression;
 
+    }
+    
+    public String getStatusNameByStatusId(Long statusId){
+        
+        Optional<Statuslead> statusOp = statusleadRepository.findById(statusId);
+        if (statusOp.isPresent()){
+            return statusOp.get().getDescription();
+        }
+        
+        return null;
+        
     }
     
 }
