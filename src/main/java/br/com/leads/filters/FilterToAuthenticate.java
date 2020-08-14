@@ -45,7 +45,7 @@ public class FilterToAuthenticate implements Filter {
             }
         }else{
             // se for endpoint de login, não precisa ter token
-            if(req.getRequestURI().equals("/auth/login")){
+            if(req.getRequestURI().equals("/auth/login") || req.getRequestURI().equals("/auth/new-user")){
                 fc.doFilter(request, response);
             }else{
                 ((HttpServletResponse)response).setStatus(401);

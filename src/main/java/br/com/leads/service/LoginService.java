@@ -55,7 +55,6 @@ public class LoginService {
         Date dateNow = new Date();
         long expirationDateInMilliseconds = dateNow.getTime() + 7200000;
         
-        
         token.setToken(UUID.randomUUID().toString());
         token.setExpirationDate(new Timestamp(expirationDateInMilliseconds));
         token = tokenRepository.save(token);
@@ -65,6 +64,38 @@ public class LoginService {
         objectToReturn.setExpirationDate(new Date(expirationDateInMilliseconds));
         
         return objectToReturn;
+        
+    }
+    
+    public void registerUser(LoginData newUserObject) throws Exception {
+        
+        if (newUserObject.getUserName() == null || "".equals(newUserObject.getUserName())
+                || newUserObject.getPassword() == null || "".equals(newUserObject.getPassword())){
+            throw new Exception("Usuário e senha devem ser preenchidos.");
+        }
+        
+        // verificar se já tem registro com este nome de usuário
+        /*Optional<User> userAlreadyExists = userRepository.findByUserName(newUserObject.getUserName());
+        if (userAlreadyExists.isPresent()){
+            throw new Exception("Já existe um usuário com este nome, favor escolher outro.");
+        }*/
+        
+        // registro de usuário
+        User newUser = new User();
+        newUser.setUserName(newUserObject.getUserName());
+        newUser.setPassword(newUserObject.getPassword());
+        userRepository.save(newUser);
+        
+        // registro de token
+        Token token = new Token();
+        
+        // montando a data de validade do token
+        Date dateNow = new Date();
+        long expirationDateInMilliseconds = dateNow.getTime() + 7200000;
+        
+        token.setToken(UUID.randomUUID().toString());
+        token.setExpirationDate(new Timestamp(expirationDateInMilliseconds));
+        tokenRepository.save(token);
         
     }
 

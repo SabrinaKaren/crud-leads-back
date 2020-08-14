@@ -45,5 +45,25 @@ public class LoginController {
         return envelopingResponse;
         
     }
+    
+    @PostMapping("/new-user")
+    public EnvelopingResponseData registerUser(@RequestBody LoginData newUserObject) {
+
+    	EnvelopingResponseData envelopingResponse = new EnvelopingResponseData("login/registerUser");
+        
+        try {
+            envelopingResponse = envelopingResponse.isSuccess();
+            loginService.registerUser(newUserObject);
+            envelopingResponse.getMsgSaida().add("Usuário inserido com sucesso.");
+        } catch (Exception e) {
+            envelopingResponse = envelopingResponse.isError();
+            if (e.getMessage() != null && !"".equals(e.getMessage())){
+                envelopingResponse.getError().get(0).setMessage(e.getMessage());
+            }
+        }
+        
+        return envelopingResponse;	
+        
+    }
 
 }
